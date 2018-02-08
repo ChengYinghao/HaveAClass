@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.example.cyh.haveaclass"
+        applicationId "com.cyh.haveaclass"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
