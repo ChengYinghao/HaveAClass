@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">HaveAClass</string>
+    <string name="section_hint">请输入该课属于第几节课（1表示第一节课，2表示第二节课，以此类推）</string>
+    <string name="place_hint">请输入该课对应地点</string>
+    <string name="day_hint">请输入该课对应周几（0表示周日，1表示周一，以此类推）</string>
+    <string name="className_hint">请输入该课名称</string>
+    <string name="classType_hint">请选择该课类型</string>
+    <string name="oddWeek_hint">请选择该课属于单周还是双周（1表示单周，2表示双周）</string>
+    <string name="teacher_hint">请输入该课老师名称</string>
+    <string name="laboratory_course">лб</string>
+    <string name="lecture">лк</string>
+    <string name="practice">пр</string>
+    <string name="odd_week">One</string>
+    <string name="even_week">Two</string>
 </resources>
