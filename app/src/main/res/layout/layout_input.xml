@@ -40,7 +40,8 @@
 
             <RadioGroup
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/radioButton5"
@@ -61,7 +62,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/practice" /> </RadioGroup>
+                    android:text="@string/practice" />
+            </RadioGroup>
 
                 <TextView
                     android:id="@+id/textView"
@@ -87,23 +89,24 @@
                     android:text="@string/oddWeek_hint" />
 
             <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/radioButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/odd_week" />
+                <RadioButton
+                    android:id="@+id/radioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/odd_week" />
 
-                    <RadioButton
-                        android:id="@+id/radioButton2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/even_week" />
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/even_week" />
 
             </RadioGroup>
 
