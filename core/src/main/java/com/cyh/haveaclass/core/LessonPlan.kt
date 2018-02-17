@@ -24,18 +24,19 @@ interface Lesson {
 	
 	/**
 	 * 单周还是双周
-	 * 1 表示单周，2表示双周
+	 * 1 表示单周，2 表示双周
 	 */
 	val week: Int
 	
 	/**
 	 * 课在星期几
-	 * （0表示星期日）
+	 * （星期一是 1 ，星期日是 7 ）
 	 */
 	val day: Int
 	
 	/**
 	 * 课在哪一节
+	 * 第一节课从 1 开始
 	 */
 	val section: Int
 	
@@ -44,3 +45,13 @@ interface Lesson {
 	 */
 	val teacher: String
 }
+
+data class InstantLesson(
+	override val name: String,
+	override val type: String,
+	override val place: String,
+	override val week: Int,
+	override val day: Int,
+	override val section: Int,
+	override val teacher: String
+) : Lesson
