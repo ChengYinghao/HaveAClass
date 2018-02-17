@@ -1,4 +1,4 @@
-package com.cyh.haveaclass;
+package com.cyh.haveaclass.ui;
 
 import android.app.Activity;
 

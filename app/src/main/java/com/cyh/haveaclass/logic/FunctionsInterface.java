@@ -1,6 +1,6 @@
-package com.cyh.haveaclass;
-
-import com.cyh.haveaclass.core.AClass;
+package com.cyh.haveaclass.logic;
+import com.cyh.haveaclass.core.Lesson;
+import com.cyh.haveaclass.core.LessonPlan;
 
 import java.util.ArrayList;
 
@@ -11,21 +11,21 @@ import java.util.ArrayList;
 public interface FunctionsInterface {
     /**
      * 该方法实现用网络爬虫获取课表
-     * @param classes 课表里所有课程
+     * @param plan 课表里所有课程
      */
-    void getClassScheduleFromInternet(ArrayList<AClass> classes);
+    void getClassScheduleFromInternet(LessonPlan plan);
 
     /**
      * 该方法通过用户输入获取课表
-     * @param classes 课表里所有课
+     * @param lesson 课表里所有课
      */
-    void getClassScheduleFromInput(ArrayList<AClass> classes);
+    void getClassScheduleFromInput(Lesson lesson);
 
     /**
      * 该方法获取距当前时间最近的下节课
      * @return 下节课名及其时间地点
      */
-    String getRecentClass();
+    Lesson getRecentLesson();
 
     /**
      * 该方法实现自动提醒功能

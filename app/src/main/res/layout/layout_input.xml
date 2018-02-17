@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName"
-                android:text="ClassName" />
+                android:text="LessonName" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -152,6 +152,12 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:text="TeacherName" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button" />
 
 
         </LinearLayout>
