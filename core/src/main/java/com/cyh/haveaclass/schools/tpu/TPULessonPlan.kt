@@ -28,15 +28,15 @@ class TPULessonPlan(val groupName: String) : LessonPlan {
 		return weekHtml.child(1).child(0).children().flatMap { li_week ->
 			val day = parseDayText(li_week.child(0).text())
 			li_week.child(1).children().map { li_lesson ->
-				InstantLesson(
-					name = li_lesson.child(1).text(),
-					type = li_lesson.child(2).text(),
-					place = li_lesson.child(3).text(),
-					week = week,
-					day = day,
-					section = parseSectionText(li_lesson.child(0).text()),
-					teacher = li_lesson.child(4).text()
+				val section = parseSectionText(li_lesson.child(0).text())
+				val instantLesson = InstantLesson(
+					li_lesson.child(1).text(),
+					li_lesson.child(2).text(),
+					li_lesson.child(3).text(),
+					week, day, section,
+					li_lesson.child(4).text()
 				)
+				instantLesson
 			}
 		}
 	}

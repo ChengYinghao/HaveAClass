@@ -1,29 +1,45 @@
 package com.cyh.haveaclass.core
 
-abstract class UserLessonPlan : LessonPlan {
+interface UserLessonPlan : LessonPlan {
 	
-	abstract override fun allLessons(): Collection<UserLesson>
+	override fun allLessons(): Collection<UserLesson>
 	
-	abstract fun getLesson(id: Int): UserLesson
+	fun getLesson(id: Int): UserLesson
 	
-	abstract fun addLesson(lesson: Lesson): Int
+	fun addLesson(lesson: Lesson): Int
 	
-	abstract fun setLesson(id: Int, lesson: Lesson): Boolean
+	fun addLessons(lessons: Collection<Lesson>): Collection<Int> {
+		return lessons.map { addLesson(it) }
+	}
 	
-	abstract fun removeLesson(id: Int)
+	fun setLesson(id: Int, lesson: Lesson): Boolean
 	
-	open fun selectLessonsByTime(week: Int, day: Int, section: Int): Collection<UserLesson> {
+	fun removeLesson(id: Int): Boolean
+	
+	override fun selectLessonsByWeek(week: Int): Collection<UserLesson> {
+		return allLessons().filter { it.week == week }
+	}
+	
+	override fun selectLessonsByDay(week: Int, day: Int): Collection<UserLesson> {
+		return allLessons().filter { it.week == week && it.day == day }
+	}
+	
+	override fun selectLessonsBySection(week: Int, day: Int, section: Int): Collection<UserLesson> {
 		return allLessons().filter { it.week == week && it.day == day && section == section }
 	}
 	
 }
 
-data class UserLesson(
+interface UserLesson : Lesson {
 	/**
 	 * 课的id
 	 * 在同一个[UserLessonPlan]中区分各个[UserLesson]
 	 */
-	val id: Int,
+	val id: Int
+}
+
+data class InstantUserLesson(
+	override val id: Int,
 	override val name: String,
 	override val type: String,
 	override val place: String,
@@ -31,4 +47,4 @@ data class UserLesson(
 	override val day: Int,
 	override val section: Int,
 	override val teacher: String
-) : Lesson
+) : UserLesson
