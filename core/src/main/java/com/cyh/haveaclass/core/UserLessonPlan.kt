@@ -21,11 +21,11 @@ interface UserLessonPlan : LessonPlan {
 	}
 	
 	override fun selectLessonsByDay(week: Int, day: Int): Collection<UserLesson> {
-		return allLessons().filter { it.weekType == week && it.dayOfWeek == day }
+		return selectLessonsByWeek(week).filter { it.dayOfWeek == day }
 	}
 	
 	override fun selectLessonsBySection(week: Int, day: Int, section: Int): Collection<UserLesson> {
-		return allLessons().filter { it.weekType == week && it.dayOfWeek == day && section == section }
+		return selectLessonsByDay(week, day).filter { it.section == section }
 	}
 	
 }

@@ -10,11 +10,11 @@ interface LessonPlan {
 	}
 	
 	fun selectLessonsByDay(week: Int, day: Int): Collection<Lesson> {
-		return allLessons().filter { it.weekType == week && it.dayOfWeek == day }
+		return selectLessonsByWeek(week).filter { it.dayOfWeek == day }
 	}
 	
 	fun selectLessonsBySection(week: Int, day: Int, section: Int): Collection<Lesson> {
-		return allLessons().filter { it.weekType == week && it.dayOfWeek == day && section == section }
+		return selectLessonsByDay(week, day).filter { it.section == section }
 	}
 	
 }
