@@ -1,8 +1,14 @@
 package com.cyh.haveaclass.core
 
 
+/**
+ * 课表。包含若干节课
+ */
 interface Plan {
 	
+	/**
+	 * 获取该[Plan]中的所有课
+	 */
 	fun allLessons(): Collection<Lesson>
 	
 	/**

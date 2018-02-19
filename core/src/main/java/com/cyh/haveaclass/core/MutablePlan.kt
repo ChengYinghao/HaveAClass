@@ -1,6 +1,10 @@
 package com.cyh.haveaclass.core
 
 
+/**
+ * 可修改的课表。
+ * 为了方便修改时指定，课会被加上[MutableLesson.id]属性
+ */
 interface MutablePlan : Plan {
 	
 	override fun allLessons(): Collection<MutableLesson>
