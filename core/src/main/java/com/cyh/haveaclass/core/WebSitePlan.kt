@@ -4,15 +4,15 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
-class RemoteLessonPlan(val groupName: String) : LessonPlan {
+class WebSitePlan(val groupName: String) : Plan {
 	
-	override fun allLessons(): Collection<Lesson> {
+	override fun allLessons(): Collection<InstantLesson> {
 		val url = "http://rasp.tpu.ru/view.php?for=$groupName&aslist=1&weekType=1"
 		val doc = Jsoup.connect(url).get()
 		return parsePageHtml(doc)
 	}
 	
-	private fun parsePageHtml(pageHtml: Document): List<Lesson> {
+	private fun parsePageHtml(pageHtml: Document): List<InstantLesson> {
 		val div_week1 = pageHtml.selectFirst("#j_weekListOddBefore1")
 		val div_week2 = pageHtml.selectFirst("#j_weekListOddBefore2")
 		
@@ -21,7 +21,7 @@ class RemoteLessonPlan(val groupName: String) : LessonPlan {
 		return classes1 + classes2
 	}
 	
-	private fun parseWeekHtml(weekHtml: Element, weekType: Int): List<Lesson> {
+	private fun parseWeekHtml(weekHtml: Element, weekType: Int): List<InstantLesson> {
 		return weekHtml.child(1).child(0).children().flatMap { li_week ->
 			val dayOfWeek = parseDayText(li_week.child(0).text())
 			li_week.child(1).children().map { li_lesson ->

@@ -1,10 +1,11 @@
 package com.cyh.haveaclass.core
 
-interface UserLessonPlan : LessonPlan {
+
+interface MutablePlan : Plan {
 	
-	override fun allLessons(): Collection<UserLesson>
+	override fun allLessons(): Collection<MutableLesson>
 	
-	fun getLesson(id: Int): UserLesson
+	fun getLesson(id: Int): MutableLesson
 	
 	fun addLesson(lesson: Lesson): Int
 	
@@ -16,29 +17,29 @@ interface UserLessonPlan : LessonPlan {
 	
 	fun removeLesson(id: Int): Boolean
 	
-	override fun selectLessonsByWeek(week: Int): Collection<UserLesson> {
+	override fun selectLessonsByWeek(week: Int): Collection<MutableLesson> {
 		return allLessons().filter { it.weekType == week }
 	}
 	
-	override fun selectLessonsByDay(week: Int, day: Int): Collection<UserLesson> {
+	override fun selectLessonsByDay(week: Int, day: Int): Collection<MutableLesson> {
 		return selectLessonsByWeek(week).filter { it.dayOfWeek == day }
 	}
 	
-	override fun selectLessonsBySection(week: Int, day: Int, section: Int): Collection<UserLesson> {
+	override fun selectLessonsBySection(week: Int, day: Int, section: Int): Collection<MutableLesson> {
 		return selectLessonsByDay(week, day).filter { it.section == section }
 	}
 	
 }
 
-interface UserLesson : Lesson {
+interface MutableLesson : Lesson {
 	/**
 	 * 课的id
-	 * 在同一个[UserLessonPlan]中区分各个[UserLesson]
+	 * 在同一个[MutablePlan]中区分各个[MutableLesson]的标识
 	 */
 	val id: Int
 }
 
-data class InstantUserLesson(
+data class InstantMutableLesson(
 	override val id: Int,
 	override val name: String,
 	override val type: String,
@@ -47,4 +48,4 @@ data class InstantUserLesson(
 	override val section: Int,
 	override val place: String,
 	override val teacher: String
-) : UserLesson
+) : MutableLesson
