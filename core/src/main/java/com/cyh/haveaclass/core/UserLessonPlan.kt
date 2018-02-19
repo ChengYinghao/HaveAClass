@@ -17,15 +17,15 @@ interface UserLessonPlan : LessonPlan {
 	fun removeLesson(id: Int): Boolean
 	
 	override fun selectLessonsByWeek(week: Int): Collection<UserLesson> {
-		return allLessons().filter { it.week == week }
+		return allLessons().filter { it.weekType == week }
 	}
 	
 	override fun selectLessonsByDay(week: Int, day: Int): Collection<UserLesson> {
-		return allLessons().filter { it.week == week && it.dayOfWeek == day }
+		return allLessons().filter { it.weekType == week && it.dayOfWeek == day }
 	}
 	
 	override fun selectLessonsBySection(week: Int, day: Int, section: Int): Collection<UserLesson> {
-		return allLessons().filter { it.week == week && it.dayOfWeek == day && section == section }
+		return allLessons().filter { it.weekType == week && it.dayOfWeek == day && section == section }
 	}
 	
 }
@@ -42,7 +42,7 @@ data class InstantUserLesson(
 	override val id: Int,
 	override val name: String,
 	override val type: String,
-	override val week: Int,
+	override val weekType: Int,
 	override val dayOfWeek: Int,
 	override val section: Int,
 	override val place: String,

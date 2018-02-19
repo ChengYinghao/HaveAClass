@@ -21,17 +21,19 @@ class RemoteLessonPlan(val groupName: String) : LessonPlan {
 		return classes1 + classes2
 	}
 	
-	private fun parseWeekHtml(weekHtml: Element, week: Int): List<Lesson> {
+	private fun parseWeekHtml(weekHtml: Element, weekType: Int): List<Lesson> {
 		return weekHtml.child(1).child(0).children().flatMap { li_week ->
-			val day = parseDayText(li_week.child(0).text())
+			val dayOfWeek = parseDayText(li_week.child(0).text())
 			li_week.child(1).children().map { li_lesson ->
 				val section = parseSectionText(li_lesson.child(0).text())
 				val instantLesson = InstantLesson(
-					li_lesson.child(1).text(),
-					li_lesson.child(2).text(),
-					li_lesson.child(3).text(),
-					week, day, section,
-					li_lesson.child(4).text()
+					name = li_lesson.child(1).text(),
+					type = li_lesson.child(2).text(),
+					weekType = weekType,
+					dayOfWeek = dayOfWeek,
+					section = section,
+					place = li_lesson.child(3).text(),
+					teacher = li_lesson.child(4).text()
 				)
 				instantLesson
 			}
