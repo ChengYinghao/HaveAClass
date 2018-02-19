@@ -1,6 +1,33 @@
 package com.cyh.haveaclass.core
 
 
+interface Plan {
+	
+	fun allLessons(): Collection<Lesson>
+	
+	/**
+	 * 根据[Lesson.weekType]筛选课
+	 */
+	fun selectLessonsByWeek(weekType: Int): Collection<Lesson> {
+		return allLessons().filter { it.weekType == weekType }
+	}
+	
+	/**
+	 * 根据[Lesson.weekType]和[Lesson.dayOfWeek]筛选课
+	 */
+	fun selectLessonsByDay(weekType: Int, dayOfWeek: Int): Collection<Lesson> {
+		return selectLessonsByWeek(weekType).filter { it.dayOfWeek == dayOfWeek }
+	}
+	
+	/**
+	 * 根据[Lesson.weekType]、[Lesson.dayOfWeek]和[Lesson.section]筛选课
+	 */
+	fun selectLessonsBySection(weekType: Int, dayOfWeek: Int, section: Int): Collection<Lesson> {
+		return selectLessonsByDay(weekType, dayOfWeek).filter { it.section == section }
+	}
+	
+}
+
 interface Lesson {
 	
 	/**
@@ -52,3 +79,5 @@ data class InstantLesson(
 	override val place: String,
 	override val teacher: String
 ) : Lesson
+
+

@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import java.util.*
 
-class UtilsUnitTest {
+class PlanUtilsUnitTest {
 	
 	@Test
 	fun nowWeekType() {
@@ -13,7 +13,7 @@ class UtilsUnitTest {
 		val dates = intArrayOf(17, 18, 19)
 		val weekTypes = dates.map { date ->
 			calendar.set(2018, 2, date)
-			LessonPlanUtils.nowWeekType(calendar)
+			PlanUtils.nowWeekType(calendar)
 		}.toIntArray()
 		val rightAnswer = intArrayOf(1, 0, 0)
 		
@@ -27,7 +27,7 @@ class UtilsUnitTest {
 		val dates = intArrayOf(17, 18, 19)
 		val weekTypes = dates.map { date ->
 			calendar.set(2018, 2, date)
-			LessonPlanUtils.nowDayOfWeek(calendar)
+			PlanUtils.nowDayOfWeek(calendar)
 		}.toIntArray()
 		val rightAnswer = intArrayOf(6, 0, 1)
 		
@@ -42,7 +42,7 @@ class UtilsUnitTest {
 		val sections = time.map { (hour, minute) ->
 			calendar.set(Calendar.HOUR_OF_DAY, hour)
 			calendar.set(Calendar.MINUTE, minute)
-			LessonPlanUtils.nowSection(calendar)
+			PlanUtils.nowSection(calendar)
 		}.toIntArray()
 		val rightAnswer = intArrayOf(0, 1, 1, 2, 7, 8)
 		

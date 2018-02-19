@@ -2,10 +2,10 @@ package com.cyh.haveaclass.core
 
 import java.util.*
 
-object LessonPlanUtils {
+object PlanUtils {
 	
 	/**
-	 * @return 现在是星期几，
+	 * @return [calendar]的时间是星期几，
 	 * 星期日用 0 表示，星期一到星期六用 1~6 表示
 	 */
 	fun nowDayOfWeek(calendar: Calendar = Calendar.getInstance()): Int {
@@ -13,7 +13,7 @@ object LessonPlanUtils {
 	}
 	
 	/**
-	 * @return 当前是单周还是双周。
+	 * @return [calendar]的时间是单周还是双周。
 	 * 双周用 0 表示，单周用 1 表示。
 	 * 周日视为一周的开始。
 	 */
@@ -24,11 +24,11 @@ object LessonPlanUtils {
 	}
 	
 	/**
-	 * @return 现在在哪一节课，
+	 * @return [calendar]的时间在哪一节课，
 	 * 第一到第七节课用 1~7 表示。
 	 * 若在早上上课前则用 0 表示。
 	 * 若在晚上放学后则用 8 表示。
-	 * 若处于课间则当作是前一节课。
+	 * 若在课间则当作是前一节课。
 	 */
 	fun nowSection(calendar: Calendar = Calendar.getInstance()): Int {
 		fun minuteOfDay(hour: Int, minute: Int) = hour * 60 + minute
