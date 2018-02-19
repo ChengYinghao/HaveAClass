@@ -44,7 +44,7 @@ class UtilsUnitTest {
 			calendar.set(Calendar.MINUTE, minute)
 			LessonPlanUtils.nowSection(calendar)
 		}.toIntArray()
-		val rightAnswer = intArrayOf(0, 1, 1, 2, 7, 0)
+		val rightAnswer = intArrayOf(0, 1, 1, 2, 7, 8)
 		
 		Assert.assertArrayEquals(rightAnswer, sections)
 	}

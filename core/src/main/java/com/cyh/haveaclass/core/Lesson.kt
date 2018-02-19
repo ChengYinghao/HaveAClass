@@ -13,24 +13,22 @@ interface Lesson {
 	 */
 	val type: String
 	
-	
 	/**
 	 * 单周还是双周，
-	 * 0 表示双周，1 表示单周，
+	 * 双周用 0 表示，单周用 1 表示，
 	 * 周日视为一周的开始。
 	 */
 	val weekType: Int
 	
 	/**
 	 * 课在星期几，
-	 * 星期日是 0 ，星期一是 1
+	 * 星期日用 0 表示，星期一到星期六用 1~6 表示
 	 */
 	val dayOfWeek: Int
 	
 	/**
 	 * 课在哪一节，
-	 * 第一节课从 1 开始，课间时间属于前一节课，
-	 * 非上课时间（如晚上）用 0 表示
+	 * 第一节课从 1 开始，第七节课用 7 表示
 	 */
 	val section: Int
 	
@@ -38,7 +36,6 @@ interface Lesson {
 	 * 课的地点
 	 */
 	val place: String
-	
 	
 	/**
 	 * 授课老师名字
