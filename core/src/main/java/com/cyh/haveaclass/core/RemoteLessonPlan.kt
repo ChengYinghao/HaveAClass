@@ -1,13 +1,10 @@
-package com.cyh.haveaclass.schools.tpu
+package com.cyh.haveaclass.core
 
-import com.cyh.haveaclass.core.InstantLesson
-import com.cyh.haveaclass.core.Lesson
-import com.cyh.haveaclass.core.LessonPlan
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 
-class TPULessonPlan(val groupName: String) : LessonPlan {
+class RemoteLessonPlan(val groupName: String) : LessonPlan {
 	
 	override fun allLessons(): Collection<Lesson> {
 		val url = "http://rasp.tpu.ru/view.php?for=$groupName&aslist=1&weekType=1"
