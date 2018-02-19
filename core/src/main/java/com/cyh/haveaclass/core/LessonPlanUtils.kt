@@ -4,22 +4,26 @@ import java.util.*
 
 object LessonPlanUtils {
 	
-	fun getNowDay(calendar: Calendar = Calendar.getInstance()): Int {
-		return calendar.get(Calendar.DAY_OF_WEEK).let { day ->
-			if (day == Calendar.SUNDAY) 7
-			else day - 1
-		}
+	fun nowDayOfWeek(calendar: Calendar = Calendar.getInstance()): Int {
+		return calendar.get(Calendar.DAY_OF_WEEK) - 1
 	}
 	
-	fun getNowWeek(calendar: Calendar = Calendar.getInstance()): Int {
-		val dayUTC = calendar.timeInMillis / 1000 / 3600 / 24 - 4
-		return ((dayUTC / 7L) % 2 + 1).toInt()
+	fun nowWeekType(calendar: Calendar = Calendar.getInstance()): Int {
+		val day = calendar.timeInMillis / 1000 / 3600 / 24 - 3
+		val weekUTC = day / 7L + 1
+		return (weekUTC % 2).toInt()
 	}
 	
-	fun getSection(calendar: Calendar): Int {
-		val hour = calendar.get(Calendar.HOUR_OF_DAY)
-		val minute = calendar.get(Calendar.MINUTE)
-		return Math.ceil(((hour * 60 + minute - 8 * 60 - 30) / 115).toDouble()).toInt()
+	fun nowSection(calendar: Calendar = Calendar.getInstance()): Int {
+		fun minuteOfDay(hour: Int, minute: Int) = hour * 60 + minute
+		
+		val nowMinuteOfDay = minuteOfDay(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
+		val dayStart = minuteOfDay(8, 30)
+		val dayEnd = minuteOfDay(21, 35)
+		
+		if (nowMinuteOfDay < dayStart) return 0
+		if (nowMinuteOfDay > dayEnd) return 0
+		return (nowMinuteOfDay - dayStart) / 115 + 1
 	}
 	
 }
