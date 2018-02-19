@@ -12,4 +12,7 @@
     <string name="practice">пр</string>
     <string name="odd_week">One</string>
     <string name="even_week">Two</string>
+    <string name="nextLessonHint">在这里显示下一节课信息</string>
+    <string name="nextLessonButton">NextLesson</string>
+    <string name="completeInput">Complete</string>
 </resources>
