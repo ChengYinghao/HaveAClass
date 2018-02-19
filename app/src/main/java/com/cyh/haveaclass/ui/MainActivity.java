@@ -1,180 +1,90 @@
 package com.cyh.haveaclass.ui;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.cyh.haveaclass.R;
 import com.cyh.haveaclass.core.Lesson;
-import com.cyh.haveaclass.core.LessonPlan;
-import com.cyh.haveaclass.logic.FunctionsInterface;
-
-import org.jetbrains.annotations.NotNull;
+import com.cyh.haveaclass.core.PlanUtils;
+import com.cyh.haveaclass.core.WebSitePlan;
 
 import java.util.Calendar;
+import java.util.Collection;
 
 
-public class MainActivity extends AppCompatActivity implements FunctionsInterface {
-    SQLiteDatabase database;
-    private final String TABLE_NAME = "ClassScheduleTable";
-    private final String PATH = "ClassScheduleDataBase";
-    private final String COLUMN_NAME = "name";
-    private final String COLUMN_TYPE = "type";
-    private final String COLUMN_PLACE = "place";
-    private final String COLUMN_WEEK = "week";
-    private final String COLUMN_DAY = "day";
-    private final String COLUMN_SECTION = "section";
-    private final String COLUMN_TEACHER = "teacher";
+public class MainActivity extends AppCompatActivity {
+    WebSitePlan webSitePlan;
+    Button button;
+    TextView display;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        database = SQLiteDatabase.openOrCreateDatabase(PATH, null);
-        createTable(database);
+        webSitePlan = new WebSitePlan("150Б52");
+        button = findViewById(R.id.nextLesson_display_button);
+        display = findViewById(R.id.nextLesson_display_text);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                int day = PlanUtils.INSTANCE.nowDayOfWeek(calendar);
+                int week = PlanUtils.INSTANCE.nowWeekType(calendar);
+                int section = PlanUtils.INSTANCE.nowSection(calendar);
+                int nextSection = section + 1;
+                if (nextSection >= 8) {
+                    display.setText("今天没课啦，玩去吧！");
+                    return;
+                }
+                Collection<Lesson> nextLessons = webSitePlan.selectLessonsBySection(week, day, section + 1);
+                int size = nextLessons.size();
+                if (size == 0) {
+                    display.setText("下节没课，开心吧");
+                } else {
+                    String nextLesson = "";
+                    for (Lesson lesson : nextLessons) {
+                        nextLesson = displayLesson(lesson) + ";" + nextLesson;
+                    }
+                    display.setText(nextLesson);
+                }
+            }
+        });
     }
 
-    void createTable(SQLiteDatabase database) {
-        String create = "CREATE TABLE " + TABLE_NAME + "(_id INTEGER PRIMARY KEY AUTOINCREMENT, )"
-                + COLUMN_NAME + " TEXT, " + COLUMN_TYPE + " TEXT, " + COLUMN_PLACE + " TEXT, "
-                + COLUMN_WEEK + " INTEGER, " + COLUMN_DAY + " INTEGER, " + COLUMN_SECTION +
-                " INTEGER, " + COLUMN_TEACHER + " TEXT);";
-        database.execSQL(create);
-    }
-
-    /**
-     * 该方法用于插入单条课程记录
-     *
-     * @param lesson
-     */
-    void insertLesson(Lesson lesson) {
-        String sql = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_NAME + "," + COLUMN_TYPE + "," + COLUMN_PLACE + "," + COLUMN_WEEK + ","
-                + COLUMN_DAY + "," + COLUMN_SECTION + "," + COLUMN_TEACHER + ")" + "\rVALUES(" + lesson.getName() + ", " + lesson.getType()
-                + ", " + lesson.getPlace() + ", " + lesson.getWeek() + ", " + lesson.getDay() + ", " + lesson.getSection() + ", " + lesson.getTeacher() + " );";
-        database.execSQL(sql);
-    }
-
-    void insertLessons(LessonPlan plan) {
-        for (Lesson lesson : plan.allLessons()) {
-            insertLesson(lesson);
+    String displayLesson(Lesson lesson) {
+        String place = lesson.getPlace();
+        String name = lesson.getName();
+        String teacher = lesson.getTeacher();
+        int section = lesson.getSection();
+        String time;
+        switch (section) {
+            case 1:
+                time = "8:30";
+                break;
+            case 2:
+                time = "10:25";
+                break;
+            case 3:
+                time = "12:20";
+                break;
+            case 4:
+                time = "14:15";
+                break;
+            case 5:
+                time = "16:10";
+                break;
+            case 6:
+                time = "18:05";
+                break;
+            default:
+                time = "休息时间";
+                break;
         }
-    }
-
-    @Override
-    public void getClassScheduleFromInternet(LessonPlan plan) {
-        insertLessons(plan);
-    }
-
-    @Override
-    public void getClassScheduleFromInput(Lesson lesson) {
-        insertLesson(lesson);
-    }
-
-    @Override
-    public Lesson getRecentLesson() {
-        Calendar calendar = Calendar.getInstance();
-        final Integer week = getWeek(calendar);
-        final Integer day = getDay(calendar);
-        final Integer time = getTime(calendar);
-        Cursor cursor = database.query(TABLE_NAME, new String[]{COLUMN_NAME, COLUMN_TYPE, COLUMN_PLACE, COLUMN_WEEK, COLUMN_DAY,
-                        COLUMN_SECTION, COLUMN_TEACHER}, COLUMN_DAY + "=?, " + COLUMN_WEEK + "=?, " + COLUMN_SECTION + "=?",
-                (String[]) new Object[]{day, week, time}, null, null, null);
-        final String name = cursor.getString(2);
-        final String type = cursor.getString(3);
-        final String place = cursor.getString(4);
-        final String techer = cursor.getString(8);
-        Lesson lesson = new Lesson() {
-            @NotNull
-            @Override
-            public String getName() {
-                return name;
-            }
-
-            @NotNull
-            @Override
-            public String getType() {
-                return type;
-            }
-
-            @NotNull
-            @Override
-            public String getPlace() {
-                return place;
-            }
-
-            @Override
-            public int getWeek() {
-                return week;
-            }
-
-            @Override
-            public int getDay() {
-                return day;
-            }
-
-            @Override
-            public int getSection() {
-                return time;
-            }
-
-            @NotNull
-            @Override
-            public String getTeacher() {
-                return techer;
-            }
-        };
-        return lesson;
-    }
-
-
-    @Override
-    public void notifyAutomatically() {
-
-    }
-
-    Lesson queryLesson(String[] selections) {
-        return null;
-    }
-
-    /**
-     * 该方法用于获取今天周几
-     *
-     * @return 一周的第几天
-     */
-    int getDay(Calendar calendar) {
-        int day;
-        int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
-        if (currentDay == Calendar.SUNDAY) {
-            day = 7;
-        } else {
-            day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        }
-        return day;
-    }
-
-    /**
-     * 该方法用于获取今天属于单周还是双周
-     *
-     * @param calendar
-     * @return
-     */
-    int getWeek(Calendar calendar) {
-        int week = calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH);
-        int result = (week % 2 == 0) ? 2 : 1;
+        String result = "下节课是" + name + ", " + time + "在" + place + "上课, " + "老师是" + teacher;
         return result;
     }
 
-    /**
-     * 该方法用于获取现在时间并将其转换为属于第几个Section
-     *
-     * @param calendar
-     * @return
-     */
-    int getTime(Calendar calendar) {
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        int curSection = (int) Math.ceil((hour * 60 + minute - 8 * 60 - 30) / 115);
-        return curSection;
-    }
+
 }
