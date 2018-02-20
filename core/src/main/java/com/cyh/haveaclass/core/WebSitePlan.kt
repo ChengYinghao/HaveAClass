@@ -14,10 +14,11 @@ class WebSitePlan(val groupName: String) : Plan {
 	
 	private fun parsePageHtml(pageHtml: Document): List<InstantLesson> {
 		val div_week1 = pageHtml.selectFirst("#j_weekListOddBefore1")
-		val div_week2 = pageHtml.selectFirst("#j_weekListOddBefore2")
-		
 		val classes1 = parseWeekHtml(div_week1, 1)
-		val classes2 = parseWeekHtml(div_week2, 2)
+		
+		val div_week2 = pageHtml.selectFirst("#j_weekListOddBefore2")
+		val classes2 = parseWeekHtml(div_week2, 0)
+		
 		return classes1 + classes2
 	}
 	
