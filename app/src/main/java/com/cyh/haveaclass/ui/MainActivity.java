@@ -29,26 +29,49 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar calendar = Calendar.getInstance();
-                int day = PlanUtils.INSTANCE.nowDayOfWeek(calendar);
-                int week = PlanUtils.INSTANCE.nowWeekType(calendar);
-                int section = PlanUtils.INSTANCE.nowSection(calendar);
-                int nextSection = section + 1;
-                if (nextSection >= 8) {
-                    display.setText("今天没课啦，玩去吧！");
-                    return;
-                }
-                Collection<Lesson> nextLessons = webSitePlan.selectLessonsBySection(week, day, section + 1);
-                int size = nextLessons.size();
-                if (size == 0) {
-                    display.setText("下节没课，开心吧");
-                } else {
-                    String nextLesson = "";
-                    for (Lesson lesson : nextLessons) {
-                        nextLesson = displayLesson(lesson) + ";" + nextLesson;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Calendar calendar = Calendar.getInstance();
+                        int day = PlanUtils.INSTANCE.nowDayOfWeek(calendar);
+                        int week = PlanUtils.INSTANCE.nowWeekType(calendar);
+                        int section = PlanUtils.INSTANCE.nowSection(calendar);
+                        int nextSection = section + 1;
+                        if (nextSection >= 8) {
+                            display.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    display.setText("今天没课啦，玩去吧！");
+                                }
+                            });
+                            return;
+                        }
+                        Collection<Lesson> nextLessons = webSitePlan.selectLessonsBySection(week, day, nextSection);
+                        int size = nextLessons.size();
+                        if (size == 0) {
+                            display.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    display.setText("下节没课，开心吧");
+                                }
+                            });
+                        } else {
+                            StringBuilder nextLesson = new StringBuilder();
+                            for (Lesson lesson : nextLessons) {
+                                nextLesson.insert(0, displayLesson(lesson) + ";");
+                            }
+                            final String finalNextLesson = nextLesson.toString();
+                            display.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    display.setText(finalNextLesson);
+                                }
+                            });
+
+                        }
                     }
-                    display.setText(nextLesson);
-                }
+                }).start();
+
             }
         });
     }
