@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         String name = lesson.getName();
         String teacher = lesson.getTeacher();
         int section = lesson.getSection();
+        String type = lesson.getType();
         String time;
         switch (section) {
             case 1:
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 time = "休息时间";
                 break;
         }
-        String result = "下节课是" + name + ", " + time + "在" + place + "上课, " + "老师是" + teacher;
+        String result = "下节课是" + name + "的" + type + ", " + time + "在" + place + "上课, " + "老师是" + teacher;
         return result;
     }
 
