@@ -42,4 +42,56 @@ object PlanUtils {
 		return (nowMinuteOfDay - dayStart) / 115 + 1
 	}
 	
+	fun sectionToText(section: Int): String {
+		return when (section) {
+			1 -> "08:30"
+			2 -> "10:25"
+			3 -> "12:20"
+			4 -> "14:15"
+			5 -> "16:10"
+			6 -> "18:05"
+			7 -> "20:00"
+			else -> ""
+		}
+	}
+	
+	fun textToSection(time: String): Int {
+		return when (time) {
+			"08:30" -> 1
+			"10:25" -> 2
+			"12:20" -> 3
+			"14:15" -> 4
+			"16:10" -> 5
+			"18:05" -> 6
+			"20:00" -> 7
+			else -> -1
+		}
+	}
+	
+	fun dayOfWeekToText(dayOfWeek: Int): String {
+		return when (dayOfWeek) {
+			1 -> "Понедельник"
+			2 -> "Вторник"
+			3 -> "Среда"
+			4 -> "Четверг"
+			5 -> "Пятница"
+			6 -> "Суббота"
+			7 -> "Воскресение"
+			else -> ""
+		}
+	}
+	
+	fun textToDayOfWeek(text: String): Int {
+		return when (text) {
+			"Понедельник" -> 1
+			"Вторник" -> 2
+			"Среда" -> 3
+			"Четверг" -> 4
+			"Пятница" -> 5
+			"Суббота" -> 6
+			"Воскресение" -> 7
+			else -> -1
+		}
+	}
+	
 }
