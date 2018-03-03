@@ -24,10 +24,10 @@ class WebSitePlan(val groupName: String) : Plan {
 	
 	private fun parseWeekHtml(weekHtml: Element, weekType: Int): List<InstantLesson> {
 		return weekHtml.child(1).child(0).children().flatMap { li_week ->
-			val dayOfWeek = parseDayText(li_week.child(0).text())
+			val dayOfWeek = PlanUtils.textToDayOfWeek(li_week.child(0).text())
 			li_week.child(1).children().map { li_lesson ->
-				val section = parseSectionText(li_lesson.child(0).text())
-				val instantLesson = InstantLesson(
+				val section = PlanUtils.textToSection(li_lesson.child(0).text())
+				InstantLesson(
 					name = li_lesson.child(1).text(),
 					type = li_lesson.child(2).text(),
 					weekType = weekType,
@@ -36,34 +36,7 @@ class WebSitePlan(val groupName: String) : Plan {
 					place = li_lesson.child(3).text(),
 					teacher = li_lesson.child(4).text()
 				)
-				instantLesson
 			}
-		}
-	}
-	
-	private fun parseDayText(dayText: String): Int {
-		return when (dayText) {
-			"Понедельник" -> 1
-			"Вторник" -> 2
-			"Среда" -> 3
-			"Четверг" -> 4
-			"Пятница" -> 5
-			"Суббота" -> 6
-			"Воскресение" -> 7
-			else -> -1
-		}
-	}
-	
-	private fun parseSectionText(sectionText: String): Int {
-		return when (sectionText) {
-			"08:30" -> 1
-			"10:25" -> 2
-			"12:20" -> 3
-			"14:15" -> 4
-			"16:10" -> 5
-			"18:05" -> 6
-			"20:00" -> 7
-			else -> -1
 		}
 	}
 	
