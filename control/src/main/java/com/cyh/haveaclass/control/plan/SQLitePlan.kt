@@ -1,4 +1,4 @@
-package com.cyh.haveaclass.plan
+package com.cyh.haveaclass.control.plan
 
 import com.cyh.haveaclass.core.Lesson
 import com.cyh.haveaclass.core.MutableLesson
