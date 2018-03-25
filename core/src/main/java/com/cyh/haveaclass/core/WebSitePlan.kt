@@ -6,10 +6,16 @@ import org.jsoup.nodes.Element
 
 class WebSitePlan(val groupName: String) : Plan {
 	
-	override fun allLessons(): Collection<InstantLesson> {
+	override fun allLessons(): Collection<Lesson> {
+		return lessonCache ?: fetchLessons()
+	}
+	
+	private var lessonCache: List<Lesson>? = null
+	
+	private fun fetchLessons(): List<InstantLesson> {
 		val url = "http://rasp.tpu.ru/view.php?for=$groupName&aslist=1&weekType=1"
 		val doc = Jsoup.connect(url).get()
-		return parsePageHtml(doc)
+		return parsePageHtml(doc).also { lessonCache = it }
 	}
 	
 	private fun parsePageHtml(pageHtml: Document): List<InstantLesson> {
@@ -38,6 +44,11 @@ class WebSitePlan(val groupName: String) : Plan {
 				)
 			}
 		}
+	}
+	
+	private fun clearCache() {
+		lessonCache = null
+		System.gc()
 	}
 	
 }

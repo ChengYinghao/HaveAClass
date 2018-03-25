@@ -23,8 +23,7 @@ class LessonView @JvmOverloads constructor(
 			field = value
 			timeLabel.text = PlanUtils.sectionToText(value?.section ?: -1)
 			placeLabel.text = value?.place ?: ""
-			nameLabel.text = value?.name ?: ""
-			typeLabel.text = value?.type ?: ""
+			nameLabel.text = value?.run { "$name $type" } ?: ""
 			teacherLabel.text = value?.teacher ?: ""
 			
 			val color = (value?.name ?: "").hashCode() % 0x888888 + 0x888888
