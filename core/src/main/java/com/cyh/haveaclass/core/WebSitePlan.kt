@@ -12,17 +12,22 @@ class WebSitePlan(val groupName: String) : Plan {
 	
 	private var lessonCache: List<Lesson>? = null
 	
-	private fun fetchLessons(): List<InstantLesson> {
+	fun fetchLessons(): List<InstantLesson> {
 		val url = "http://rasp.tpu.ru/view.php?for=$groupName&aslist=1&weekType=1"
 		val doc = Jsoup.connect(url).get()
 		return parsePageHtml(doc).also { lessonCache = it }
 	}
 	
+	fun clearCache() {
+		lessonCache = null
+		System.gc()
+	}
+	
 	private fun parsePageHtml(pageHtml: Document): List<InstantLesson> {
-		val div_week1 = pageHtml.selectFirst("#j_weekListOddBefore1")
+		val div_week1 = pageHtml.select("#j_weekListOddBefore1").first()
 		val classes1 = parseWeekHtml(div_week1, 1)
 		
-		val div_week2 = pageHtml.selectFirst("#j_weekListOddBefore2")
+		val div_week2 = pageHtml.select("#j_weekListOddBefore2").first()
 		val classes2 = parseWeekHtml(div_week2, 0)
 		
 		return classes1 + classes2
@@ -46,9 +51,5 @@ class WebSitePlan(val groupName: String) : Plan {
 		}
 	}
 	
-	private fun clearCache() {
-		lessonCache = null
-		System.gc()
-	}
 	
 }

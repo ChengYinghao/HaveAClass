@@ -46,27 +46,28 @@ class LessonListFragment : Fragment() {
 	private val lessonList = ArrayList<Lesson>()
 	
 	private fun refreshLessonList() {
-		launch(UI) { swipeRefreshLayout.isRefreshing = true }
-		val fetch = launch { webSitePlan.allLessons() }
-		launch(UI) {
-			fetch.join()
-			val calendar = Calendar.getInstance()
-			val nowWeekType = PlanUtils.nowWeekType(calendar)
-			val nowDayOfWeek = PlanUtils.nowDayOfWeek(calendar)
-			val nowSection = PlanUtils.nowSection(calendar)
-			
-			lessonList.clear()
-			
-			lessonList += webSitePlan.selectLessonsBySection(nowWeekType, nowDayOfWeek, nowSection)
-			
-			if (nowSection < 8)
-				lessonList += webSitePlan.selectLessonsBySection(nowWeekType, nowDayOfWeek, nowSection + 1)
-			
-			if (nowSection > 7)
-				lessonList += webSitePlan.selectLessonsByDay(nowWeekType, nowDayOfWeek + 1)
-			
-			(lessonListView.adapter as BaseAdapter).notifyDataSetChanged()
-			swipeRefreshLayout.isRefreshing = false
+		swipeRefreshLayout.isRefreshing = true
+		launch {
+			webSitePlan.fetchLessons()
+			launch(UI) {
+				val calendar = Calendar.getInstance()
+				val nowWeekType = PlanUtils.nowWeekType(calendar)
+				val nowDayOfWeek = PlanUtils.nowDayOfWeek(calendar)
+				val nowSection = PlanUtils.nowSection(calendar)
+				
+				lessonList.clear()
+				
+				lessonList += webSitePlan.selectLessonsBySection(nowWeekType, nowDayOfWeek, nowSection)
+				
+				if (nowSection < 8)
+					lessonList += webSitePlan.selectLessonsBySection(nowWeekType, nowDayOfWeek, nowSection + 1)
+				
+				if (nowSection > 7)
+					lessonList += webSitePlan.selectLessonsByDay(nowWeekType, nowDayOfWeek + 1)
+				
+				(lessonListView.adapter as BaseAdapter).notifyDataSetChanged()
+				swipeRefreshLayout.isRefreshing = false
+			}
 		}
 	}
 	
