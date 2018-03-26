@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Toast
 import com.cyh.haveaclass.R
 import com.cyh.haveaclass.core.Lesson
 import com.cyh.haveaclass.core.PlanUtils
@@ -13,6 +14,7 @@ import com.cyh.haveaclass.core.WebSitePlan
 import kotlinx.android.synthetic.main.fragment_lesson_list.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import java.io.IOException
 import java.util.*
 
 class LessonListFragment : Fragment() {
@@ -48,7 +50,15 @@ class LessonListFragment : Fragment() {
 	private fun refreshLessonList() {
 		swipeRefreshLayout.isRefreshing = true
 		launch {
-			webSitePlan.fetchLessons()
+			try {
+				webSitePlan.fetchLessons()
+			} catch (e: IOException) {
+				launch(UI) {
+					Toast.makeText(getContext(), "获取课表信息失败！", Toast.LENGTH_SHORT).show()
+					swipeRefreshLayout.isRefreshing = false
+				}
+				return@launch
+			}
 			launch(UI) {
 				val calendar = Calendar.getInstance()
 				val nowWeekType = PlanUtils.nowWeekType(calendar)
