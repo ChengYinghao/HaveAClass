@@ -70,8 +70,9 @@ class LessonListFragment : Fragment() {
 				lessonList += webSitePlan.selectLessonsBySection(nowWeekType, nowDayOfWeek, nowSection)
 				
 				if (nowSection < 8)
-					lessonList += webSitePlan.selectLessonsBySection(nowWeekType, nowDayOfWeek, nowSection + 1)
-				
+					for(i in 1..5) {
+						lessonList += webSitePlan.selectLessonsBySection(nowWeekType, nowDayOfWeek, nowSection + i)
+					}
 				if (nowSection > 7)
 					lessonList += webSitePlan.selectLessonsByDay(nowWeekType, nowDayOfWeek + 1)
 				
