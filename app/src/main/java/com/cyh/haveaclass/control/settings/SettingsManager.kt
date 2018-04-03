@@ -21,7 +21,7 @@ class SettingsManager(val context: Context) {
 	
 	fun saveSettings(settings: Settings): Boolean = tryOrFalse {
 		val fileOutputStream = context.openFileOutput(settingsFileName, Context.MODE_PRIVATE)
-		settings.writeDelimitedTo(fileOutputStream)
+		settings.writeTo(fileOutputStream)
 	}
 	
 	fun loadSettings(): Settings? = tryOrNull {
