@@ -21,7 +21,7 @@ class LessonView @JvmOverloads constructor(
 	var lesson: Lesson? = null
 		set(value) {
 			field = value
-			timeLabel.text = PlanUtils.sectionToText(value?.section ?: -1)
+			timeLabel.text = PlanUtils.sectionOfDayToText(value?.section?.sectionOfDay ?: -1)
 			placeLabel.text = value?.place ?: ""
 			nameLabel.text = value?.run { "$name $type" } ?: ""
 			teacherLabel.text = value?.teacher ?: ""

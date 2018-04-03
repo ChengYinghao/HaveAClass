@@ -43,18 +43,6 @@ interface MutablePlan : Plan {
 	 */
 	fun removeLesson(id: Int)
 	
-	override fun selectLessonsByWeek(weekType: Int): Collection<MutableLesson> {
-		return allLessons().filter { it.weekType == weekType }
-	}
-	
-	override fun selectLessonsByDay(weekType: Int, dayOfWeek: Int): Collection<MutableLesson> {
-		return selectLessonsByWeek(weekType).filter { it.dayOfWeek == dayOfWeek }
-	}
-	
-	override fun selectLessonsBySection(weekType: Int, dayOfWeek: Int, section: Int): Collection<MutableLesson> {
-		return selectLessonsByDay(weekType, dayOfWeek).filter { it.section == section }
-	}
-	
 }
 
 interface MutableLesson : Lesson {
@@ -63,15 +51,18 @@ interface MutableLesson : Lesson {
 	 * 在同一个[MutablePlan]中区分各个[MutableLesson]的标识
 	 */
 	val id: Int
+	override var name: String
+	override var type: String
+	override var section: Section
+	override var place: String
+	override var teacher: String
 }
 
 data class InstantMutableLesson(
 	override val id: Int,
-	override val name: String,
-	override val type: String,
-	override val weekType: Int,
-	override val dayOfWeek: Int,
-	override val section: Int,
-	override val place: String,
-	override val teacher: String
+	override var name: String,
+	override var type: String,
+	override var section: Section,
+	override var place: String,
+	override var teacher: String
 ) : MutableLesson

@@ -37,15 +37,14 @@ class WebSitePlan(val groupName: String) : Plan {
 		return weekHtml.child(1).child(0).children().flatMap { li_week ->
 			val dayOfWeek = PlanUtils.textToDayOfWeek(li_week.child(0).text())
 			li_week.child(1).children().map { li_lesson ->
-				val section = PlanUtils.textToSection(li_lesson.child(0).text())
+				val sectionOfDay = PlanUtils.textToSectionOfDay(li_lesson.child(0).text())
+				val section = Section(weekType, dayOfWeek, sectionOfDay)
 				InstantLesson(
 					name = li_lesson.child(1).text(),
 					type = li_lesson.child(2).text(),
-					weekType = weekType,
-					dayOfWeek = dayOfWeek,
-					section = section,
 					place = li_lesson.child(3).text(),
-					teacher = li_lesson.child(4).text()
+					teacher = li_lesson.child(4).text(),
+					section = section
 				)
 			}
 		}

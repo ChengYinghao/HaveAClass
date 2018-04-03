@@ -4,32 +4,16 @@ import java.util.*
 
 object PlanUtils {
 	
-	/**
-	 * @return [calendar]的时间是星期几，
-	 * 星期日用 0 表示，星期一到星期六用 1~6 表示
-	 */
 	fun nowDayOfWeek(calendar: Calendar = Calendar.getInstance()): Int {
 		return calendar.get(Calendar.DAY_OF_WEEK) - 1
 	}
 	
-	/**
-	 * @return [calendar]的时间是单周还是双周。
-	 * 双周用 0 表示，单周用 1 表示。
-	 * 周日视为一周的开始。
-	 */
 	fun nowWeekType(calendar: Calendar = Calendar.getInstance()): Int {
 		val day = calendar.timeInMillis / 1000 / 3600 / 24 - 3
 		val weekUTC = day / 7L + 1
 		return (weekUTC % 2).toInt()
 	}
 	
-	/**
-	 * @return [calendar]的时间在哪一节课，
-	 * 第一到第七节课用 1~7 表示。
-	 * 若在早上上课前则用 0 表示。
-	 * 若在晚上放学后则用 8 表示。
-	 * 若在课间则当作是前一节课。
-	 */
 	fun nowSection(calendar: Calendar = Calendar.getInstance()): Int {
 		fun minuteOfDay(hour: Int, minute: Int) = hour * 60 + minute
 		
@@ -42,8 +26,33 @@ object PlanUtils {
 		return (nowMinuteOfDay - dayStart) / 115 + 1
 	}
 	
-	fun sectionToText(section: Int): String {
-		return when (section) {
+	fun nowSection2(calendar: Calendar = Calendar.getInstance()): Section {
+		val weekType = calendar.run {
+			val day = timeInMillis / 1000 / 3600 / 24 - 3
+			val weekUTC = day / 7L + 1
+			(weekUTC % 2).toInt()
+		}
+		val dayOfWeek = calendar.run {
+			this@run.get(Calendar.DAY_OF_WEEK) - 1
+		}
+		val sectionOfDay = calendar.run {
+			fun minuteOfDay(hour: Int, minute: Int) = hour * 60 + minute
+			
+			val nowMinuteOfDay = minuteOfDay(this@run.get(Calendar.HOUR_OF_DAY), this@run.get(Calendar.MINUTE))
+			val dayStart = minuteOfDay(8, 30)
+			val dayEnd = minuteOfDay(21, 35)
+			
+			when {
+				nowMinuteOfDay < dayStart -> 0
+				nowMinuteOfDay > dayEnd -> 8
+				else -> (nowMinuteOfDay - dayStart) / 115 + 1
+			}
+		}
+		return Section(weekType, dayOfWeek, sectionOfDay)
+	}
+	
+	fun sectionOfDayToText(sectionOfDay: Int): String {
+		return when (sectionOfDay) {
 			1 -> "08:30"
 			2 -> "10:25"
 			3 -> "12:20"
@@ -55,7 +64,7 @@ object PlanUtils {
 		}
 	}
 	
-	fun textToSection(time: String): Int {
+	fun textToSectionOfDay(time: String): Int {
 		return when (time) {
 			"08:30" -> 1
 			"10:25" -> 2
