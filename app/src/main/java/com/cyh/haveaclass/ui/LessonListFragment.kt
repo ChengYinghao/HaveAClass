@@ -63,14 +63,14 @@ class LessonListFragment : Fragment() {
 				val calendar = Calendar.getInstance()
 				val nowSection = PlanUtils.nowSection2(calendar)
 				
-				lessonList = webSitePlan.allLessons().filter { lesson ->
-					lesson.section.run {
-						val conditionWeekType = (weekType - nowSection.weekType) == 0
-						val conditionDayOfWeek = (dayOfWeek - nowSection.dayOfWeek) in 0..2
-						val conditionSectionOfDay = (sectionOfDay - nowSection.sectionOfDay) >= 0
-						conditionWeekType && (conditionDayOfWeek || conditionSectionOfDay)
-					}
-				}.toList()
+				val allLessons = webSitePlan.allLessons()
+				lessonList = allLessons.filter {
+					if (it.section.weekType == nowSection.weekType) {
+						if (it.section.dayOfWeek == nowSection.dayOfWeek) {
+							it.section.sectionOfDay >= nowSection.sectionOfDay
+						} else it.section.dayOfWeek == nowSection.dayOfWeek + 1
+					} else false
+				}
 				(lessonListView.adapter as BaseAdapter).notifyDataSetChanged()
 				swipeRefreshLayout.isRefreshing = false
 			}
