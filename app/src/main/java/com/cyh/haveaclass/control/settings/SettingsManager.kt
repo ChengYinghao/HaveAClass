@@ -2,8 +2,8 @@ package com.cyh.haveaclass.control.settings
 
 import android.content.Context
 import com.cyh.haveaclass.control.SettingsProto.Settings
-import com.cyh.haveaclass.control.utils.tryOrFalse
-import com.cyh.haveaclass.control.utils.tryOrNull
+import com.cyh.haveaclass.utils.tryOrFalse
+import com.cyh.haveaclass.utils.tryOrNull
 
 class SettingsManager(val context: Context) {
 	

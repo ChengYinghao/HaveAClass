@@ -1,4 +1,4 @@
-package com.cyh.haveaclass.control.utils
+package com.cyh.haveaclass.utils
 
 inline fun <T> tryOrNull(body: () -> T): T? {
 	return try {
