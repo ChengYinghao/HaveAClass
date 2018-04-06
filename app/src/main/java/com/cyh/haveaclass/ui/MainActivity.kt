@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 		
 		if (savedInstanceState == null)
 			supportFragmentManager.beginTransaction()
-				.add(R.id.fragmentContainer, LessonListFragment())
+				.add(R.id.fragmentContainer, LessonListFragment.newInstance("150Б52"))
 				.commit()
 	}
 	

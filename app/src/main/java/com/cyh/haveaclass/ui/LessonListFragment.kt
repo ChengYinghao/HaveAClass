@@ -14,10 +14,22 @@ import com.cyh.haveaclass.core.WebSitePlan
 import kotlinx.android.synthetic.main.fragment_lesson_list.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import java.io.IOException
 import java.util.*
 
 class LessonListFragment : Fragment() {
+	
+	companion object {
+		private const val argName_groupName = "groupName"
+		var LessonListFragment.argGroupName: String
+			get() = arguments.getString(argName_groupName)
+			set(value) {
+				arguments = (arguments ?: Bundle()).apply { putString(argName_groupName, value) }
+			}
+		
+		fun newInstance(groupName: String): LessonListFragment {
+			return LessonListFragment().apply { argGroupName = groupName }
+		}
+	}
 	
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 		return inflater.inflate(R.layout.fragment_lesson_list, container, false)
@@ -43,8 +55,8 @@ class LessonListFragment : Fragment() {
 		
 	}
 	
+	
 	//lessonList
-	private val webSitePlan = WebSitePlan("150Б52")
 	private var lessonList: List<Lesson> = emptyList()
 	
 	private fun refreshLessonList() {
@@ -52,7 +64,7 @@ class LessonListFragment : Fragment() {
 		launch {
 			try {
 				webSitePlan.fetchLessons()
-			} catch (e: IOException) {
+			} catch (e: Exception) {
 				launch(UI) {
 					Toast.makeText(getContext(), "获取课表信息失败！", Toast.LENGTH_SHORT).show()
 					swipeRefreshLayout.isRefreshing = false
@@ -75,6 +87,15 @@ class LessonListFragment : Fragment() {
 				swipeRefreshLayout.isRefreshing = false
 			}
 		}
+	}
+	
+	
+	//webSitePlan
+	private lateinit var webSitePlan: WebSitePlan
+	
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		webSitePlan = WebSitePlan(argGroupName)
 	}
 	
 }
