@@ -1,65 +1,88 @@
 package com.cyh.haveaclass.ui
 
+import android.app.Fragment
+import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import android.support.annotation.RequiresApi
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.SearchView
 import android.widget.Toast
 import com.cyh.haveaclass.R
 import com.cyh.haveaclass.core.Lesson
 import com.cyh.haveaclass.core.PlanUtils
 import com.cyh.haveaclass.core.WebSitePlan
 import kotlinx.android.synthetic.main.fragment_lesson_list.*
+import kotlinx.android.synthetic.main.search_lesson_fragment.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import java.util.*
 
-class LessonListFragment : Fragment() {
+/**
+ * Created by CYH on 2018/4/7.
+ */
+
+class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener {
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        refreshLessonList(query)
+        return false
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    override fun onQueryTextChange(newText: String?): Boolean {
+        refreshLessonList(newText)
+        return false
+    }
+
     companion object {
         private const val argName_groupName = "groupName"
-        var LessonListFragment.argGroupName: String
-            get() = arguments.getString(argName_groupName)
+        var SearchLessonFragment.argGroupName: String
+            get() = arguments.getString(SearchLessonFragment.argName_groupName)
             set(value) {
-                arguments = (arguments ?: Bundle()).apply { putString(argName_groupName, value) }
+                arguments = (arguments
+                        ?: Bundle()).apply { putString(SearchLessonFragment.argName_groupName, value) }
             }
-
-        fun newInstance(groupName: String): LessonListFragment {
-            return LessonListFragment().apply { argGroupName = groupName }
+        fun newInstance(groupName: String): SearchLessonFragment {
+            return SearchLessonFragment().apply { argGroupName = groupName }
         }
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_lesson_list, container, false)
+        return inflater.inflate(R.layout.search_lesson_fragment, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lessonListView.adapter = object : BaseAdapter() {
-            override fun getCount(): Int = lessonList.size
-            override fun getItemId(position: Int): Long = 0L
-            override fun getItem(position: Int): Lesson = lessonList[position]
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        searched_lessonListView.adapter = object : BaseAdapter() {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
                 val lessonView = (convertView as? LessonView) ?: LessonView(context)
                 lessonView.lesson = getItem(position)
                 return lessonView
             }
+
+            override fun getItem(position: Int): Lesson = search_lessonList[position]
+
+            override fun getItemId(position: Int): Long = 0L
+
+            override fun getCount(): Int = search_lessonList.size
+
+
         }
-
-        swipeRefreshLayout.setOnRefreshListener { refreshLessonList() }
-
-        refreshLessonList()
-
+        search2.setOnQueryTextListener(this)
     }
 
+    private var search_lessonList: List<Lesson> = emptyList()
 
-    //lessonList
-    private var lessonList: List<Lesson> = emptyList()
-
-
-    private fun refreshLessonList() {
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun refreshLessonList(query: String?) {
+        if (query.equals(null)) {
+            return
+        }
         swipeRefreshLayout.isRefreshing = true
         launch {
             try {
@@ -76,11 +99,9 @@ class LessonListFragment : Fragment() {
                 val nowSection = PlanUtils.nowSection2(calendar)
 
                 val allLessons = webSitePlan.allLessons()
-                lessonList = allLessons.filter {
+                search_lessonList = allLessons.filter {
                     if (it.section.weekType == nowSection.weekType) {
-                        if (it.section.dayOfWeek == nowSection.dayOfWeek) {
-                            it.section.sectionOfDay >= nowSection.sectionOfDay
-                        } else it.section.dayOfWeek == nowSection.dayOfWeek + 1
+                        it.name.indexOf(query!!) != 0 || it.teacher.indexOf(query) != 0
                     } else false
                 }
                 (lessonListView.adapter as BaseAdapter).notifyDataSetChanged()
@@ -89,13 +110,10 @@ class LessonListFragment : Fragment() {
         }
     }
 
-
-    //webSitePlan
     private lateinit var webSitePlan: WebSitePlan
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         webSitePlan = WebSitePlan(argGroupName)
     }
-
 }

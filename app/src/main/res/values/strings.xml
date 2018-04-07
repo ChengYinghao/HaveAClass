@@ -15,10 +15,6 @@
     <string name="nextLessonHint">在这里显示下一节课信息</string>
     <string name="nextLessonButton">NextLesson</string>
     <string name="completeInput">Complete</string>
-    <string name="week_of_month_text">单双周条件：</string>
-    <string name="search_week_default">无限制（默认）</string>
-    <string name="search_week_odd">单周</string>
-    <string name="search_week_even">双周</string>
     <string name="team_number_text">请输入组号</string>
     <string name="team_number_input">Группа</string>
     <string name="set_determine_button_text">OK</string>
