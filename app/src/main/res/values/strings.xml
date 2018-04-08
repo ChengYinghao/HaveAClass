@@ -18,4 +18,5 @@
     <string name="team_number_text">请输入组号</string>
     <string name="team_number_input">Группа</string>
     <string name="set_determine_button_text">OK</string>
+	<string name="search">搜索</string>
 </resources>
