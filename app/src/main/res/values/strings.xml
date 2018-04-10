@@ -19,4 +19,8 @@
     <string name="team_number_input">Группа</string>
     <string name="set_determine_button_text">OK</string>
 	<string name="search">搜索</string>
+    <string-array name="search_spinner_array">
+        <item>按老师或课程名称搜索</item>
+        <item>按周几搜索（例如среда）</item>
+    </string-array>
 </resources>
