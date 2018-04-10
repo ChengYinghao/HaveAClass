@@ -62,4 +62,16 @@
 		app:layout_constraintTop_toBottomOf="@+id/nameLabel"
 		tools:text="Волкова Е.В."/>
 
+	<TextView
+		android:id="@+id/dayLabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:layout_marginEnd="8dp"
+		android:textAppearance="@style/TextAppearance.AppCompat.Large"
+		app:layout_constraintBottom_toTopOf="@+id/nameLabel"
+		app:layout_constraintEnd_toEndOf="parent"
+		tools:text="Понедельник"
+		android:layout_marginRight="8dp" />
+
 </android.support.constraint.ConstraintLayout>
