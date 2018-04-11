@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import com.cyh.haveaclass.R
 import com.cyh.haveaclass.core.Lesson
 import com.cyh.haveaclass.core.PlanUtils
-import kotlinx.android.synthetic.main.adapter_lesson.view.*
+import kotlinx.android.synthetic.main.cv_lesson.view.*
 
 class LessonView @JvmOverloads constructor(
         context: Context,
@@ -15,7 +15,7 @@ class LessonView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
     init {
-        LayoutInflater.from(this.context).inflate(R.layout.adapter_lesson, this, true)
+        LayoutInflater.from(this.context).inflate(R.layout.cv_lesson, this, true)
     }
 
     var lesson: Lesson? = null

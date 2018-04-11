@@ -12,7 +12,8 @@ import com.cyh.haveaclass.R
 import com.cyh.haveaclass.core.Lesson
 import com.cyh.haveaclass.core.PlanUtils
 import com.cyh.haveaclass.core.WebSitePlan
-import kotlinx.android.synthetic.main.adapter_day_block.view.*
+import kotlinx.android.synthetic.main.adapter_day.view.*
+import kotlinx.android.synthetic.main.adapter_lesson.view.*
 import kotlinx.android.synthetic.main.fragment_lesson_list.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -50,7 +51,7 @@ class LessonListFragment : Fragment() {
 		lessonListView.layoutManager = LinearLayoutManager(context)
 		lessonListView.adapter = object : RecyclerView.Adapter<DayHolder>() {
 			override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DayHolder {
-				return DayHolder(View.inflate(context, R.layout.adapter_day_block, null))
+				return DayHolder(LayoutInflater.from(context).inflate(R.layout.adapter_day, parent, false))
 			}
 			
 			override fun getItemCount(): Int = showingDays.size
@@ -151,7 +152,14 @@ class DayHolder(view: View) : RecyclerView.ViewHolder(view) {
 data class Day(val weekType: Int, val dayOfWeek: Int, val lessons: List<Lesson>)
 
 class LessonHolder(view: LessonView) : RecyclerView.ViewHolder(view) {
+	private val timeLabel = view.timeLabel
+	private val placeLabel = view.placeLabel
+	private val nameLabel = view.nameLabel
+	private val teacherLabel = view.teacherLabel
 	fun update(lesson: Lesson) {
-		(itemView as LessonView).lesson = lesson
+		timeLabel.text = PlanUtils.sectionOfDayToText(lesson.section.sectionOfDay)
+		placeLabel.text = lesson.place
+		nameLabel.text = lesson.run { "$name $type" }
+		teacherLabel.text = lesson.teacher
 	}
 }
