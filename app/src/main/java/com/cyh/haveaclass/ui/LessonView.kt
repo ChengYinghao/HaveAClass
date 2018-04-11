@@ -29,6 +29,13 @@ class LessonView @JvmOverloads constructor(
             } ?: ""
             teacherLabel.text = value?.teacher ?: ""
             dayLabel.text = PlanUtils.dayOfWeekToText(value?.section?.dayOfWeek ?: -1)
+            var weekType: Int? = value?.section?.weekType
+            when {
+                weekType != null -> if (weekType == 0) {
+                    weekLabel.text = "чёт"
+                } else weekLabel.text = "неч"
+                else -> weekLabel.text = ""
+            }
 
             val color = (value?.name ?: "").hashCode() % 0x888888 + 0x888888
             mainLayout.setBackgroundColor(color)

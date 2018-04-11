@@ -32,7 +32,7 @@
 		app:layout_constraintStart_toEndOf="@+id/timeLabel"
 		app:layout_constraintTop_toTopOf="@+id/timeLabel"
 		tools:text="19-522"/>
-	
+
 	<TextView
 		android:id="@+id/nameLabel"
 		android:layout_width="0dp"
@@ -41,10 +41,10 @@
 		android:layout_marginStart="8dp"
 		android:layout_marginTop="8dp"
 		android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintEnd_toStartOf="@+id/textView"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/timeLabel"
-		tools:text="Русский язык ПР"/>
+		tools:text="Русский язык ПР" />
 	
 	<TextView
 		android:id="@+id/teacherLabel"
@@ -72,6 +72,18 @@
 		app:layout_constraintBottom_toTopOf="@+id/nameLabel"
 		app:layout_constraintEnd_toEndOf="parent"
 		tools:text="Понедельник"
+		android:layout_marginRight="8dp" />
+
+	<TextView
+		android:id="@+id/weekLabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:layout_marginEnd="8dp"
+		android:textAppearance="@style/TextAppearance.AppCompat.Small"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		tools:text="неч"
 		android:layout_marginRight="8dp" />
 
 </android.support.constraint.ConstraintLayout>
