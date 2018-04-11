@@ -90,7 +90,7 @@ class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener, OnItemS
         search_swipeRefreshLayout.isRefreshing = true
         launch {
             try {
-                webSitePlan.fetchLessons()
+                webSitePlan.loadLessons()
             } catch (e: Exception) {
                 launch(UI) {
                     Toast.makeText(getContext(), "获取课表信息失败！", Toast.LENGTH_SHORT).show()

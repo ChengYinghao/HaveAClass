@@ -4,7 +4,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
+	android:layout_width="380dp"
 	android:layout_height="wrap_content">
 	
 	<TextView
@@ -32,7 +32,7 @@
 		app:layout_constraintStart_toEndOf="@+id/timeLabel"
 		app:layout_constraintTop_toTopOf="@+id/timeLabel"
 		tools:text="19-522"/>
-
+	
 	<TextView
 		android:id="@+id/nameLabel"
 		android:layout_width="0dp"
@@ -43,7 +43,7 @@
 		android:textAppearance="@style/TextAppearance.AppCompat.Medium"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/timeLabel"
-		tools:text="Русский язык ПР" />
+		tools:text="Русский язык ПР"/>
 	
 	<TextView
 		android:id="@+id/teacherLabel"
@@ -60,29 +60,29 @@
 		app:layout_constraintStart_toStartOf="@+id/nameLabel"
 		app:layout_constraintTop_toBottomOf="@+id/nameLabel"
 		tools:text="Волкова Е.В."/>
-
+	
 	<TextView
 		android:id="@+id/dayLabel"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="8dp"
 		android:layout_marginEnd="8dp"
+		android:layout_marginRight="8dp"
 		android:textAppearance="@style/TextAppearance.AppCompat.Large"
 		app:layout_constraintBottom_toTopOf="@+id/nameLabel"
 		app:layout_constraintEnd_toEndOf="parent"
-		tools:text="Понедельник"
-		android:layout_marginRight="8dp" />
-
+		tools:text="Понедельник"/>
+	
 	<TextView
 		android:id="@+id/weekLabel"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="8dp"
 		android:layout_marginEnd="8dp"
+		android:layout_marginRight="8dp"
 		android:textAppearance="@style/TextAppearance.AppCompat.Small"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		tools:text="неч"
-		android:layout_marginRight="8dp" />
+		tools:text="неч"/>
 
 </android.support.constraint.ConstraintLayout>

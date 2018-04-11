@@ -2,15 +2,17 @@ package com.cyh.haveaclass.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.Toast
 import com.cyh.haveaclass.R
 import com.cyh.haveaclass.core.Lesson
 import com.cyh.haveaclass.core.PlanUtils
 import com.cyh.haveaclass.core.WebSitePlan
+import kotlinx.android.synthetic.main.adapter_day_block.view.*
 import kotlinx.android.synthetic.main.fragment_lesson_list.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -45,15 +47,19 @@ class LessonListFragment : Fragment() {
 				.commit()
 		}
 		
-		lessonListView.adapter = object : BaseAdapter() {
-			override fun getCount(): Int = lessonList.size
-			override fun getItemId(position: Int): Long = 0L
-			override fun getItem(position: Int): Lesson = lessonList[position]
-			override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-				val lessonView = (convertView as? LessonView) ?: LessonView(context)
-				lessonView.lesson = getItem(position)
-				return lessonView
+		lessonListView.layoutManager = LinearLayoutManager(context)
+		lessonListView.adapter = object : RecyclerView.Adapter<DayHolder>() {
+			override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DayHolder {
+				return DayHolder(View.inflate(context, R.layout.adapter_day_block, null))
 			}
+			
+			override fun getItemCount(): Int = showingDays.size
+			
+			override fun onBindViewHolder(holder: DayHolder, position: Int) {
+				val day = showingDays[position]
+				holder.update(day)
+			}
+			
 		}
 		
 		swipeRefreshLayout.setOnRefreshListener { refreshLessonList() }
@@ -64,13 +70,13 @@ class LessonListFragment : Fragment() {
 	
 	
 	//lessonList
-	private var lessonList: List<Lesson> = emptyList()
+	private var showingDays: List<Day> = emptyList()
 	
 	private fun refreshLessonList() {
 		swipeRefreshLayout.isRefreshing = true
 		launch {
 			try {
-				webSitePlan.fetchLessons()
+				webSitePlan.loadLessons()
 			} catch (e: Exception) {
 				launch(UI) {
 					Toast.makeText(getContext(), "获取课表信息失败！", Toast.LENGTH_SHORT).show()
@@ -83,19 +89,24 @@ class LessonListFragment : Fragment() {
 				val nowSection = PlanUtils.nowSection2(calendar)
 				
 				val allLessons = webSitePlan.allLessons()
-				lessonList = allLessons.filter {
-					if (it.section.weekType == nowSection.weekType) {
-						if (it.section.dayOfWeek == nowSection.dayOfWeek) {
-							it.section.sectionOfDay >= nowSection.sectionOfDay
-						} else it.section.dayOfWeek == nowSection.dayOfWeek + 1
-					} else false
+				val todayLessons = allLessons.filter {
+					it.section.weekType == nowSection.weekType
+						&& it.section.dayOfWeek == nowSection.dayOfWeek
 				}
-				(lessonListView.adapter as BaseAdapter).notifyDataSetChanged()
+				val today = Day(nowSection.weekType, nowSection.dayOfWeek, todayLessons)
+				
+				val tomorrowLessons = allLessons.filter {
+					it.section.weekType == nowSection.weekType
+						&& it.section.dayOfWeek == nowSection.dayOfWeek + 1
+				}
+				val tomorrow = Day(nowSection.weekType, nowSection.dayOfWeek + 1, tomorrowLessons)
+				
+				showingDays = listOf(today, tomorrow)
+				lessonListView.adapter.notifyDataSetChanged()
 				swipeRefreshLayout.isRefreshing = false
 			}
 		}
 	}
-	
 	
 	//webSitePlan
 	private lateinit var webSitePlan: WebSitePlan
@@ -105,4 +116,42 @@ class LessonListFragment : Fragment() {
 		webSitePlan = WebSitePlan(argGroupName)
 	}
 	
+}
+
+class DayHolder(view: View) : RecyclerView.ViewHolder(view) {
+	private val dayLabel = view.dayLabel
+	private val lessonList = view.lessonList
+	
+	private var showingLessons: List<Lesson> = emptyList()
+	
+	init {
+		lessonList.layoutManager = LinearLayoutManager(itemView.context)
+		lessonList.adapter = object : RecyclerView.Adapter<LessonHolder>() {
+			
+			override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): LessonHolder {
+				return LessonHolder(LessonView(this@DayHolder.itemView.context))
+			}
+			
+			override fun getItemCount(): Int = showingLessons.size
+			
+			override fun onBindViewHolder(holder: LessonHolder, position: Int) {
+				holder.update(showingLessons[position])
+			}
+			
+		}
+	}
+	
+	fun update(day: Day) {
+		dayLabel.text = PlanUtils.dayOfWeekToText(day.dayOfWeek)
+		showingLessons = day.lessons
+		lessonList.adapter.notifyDataSetChanged()
+	}
+}
+
+data class Day(val weekType: Int, val dayOfWeek: Int, val lessons: List<Lesson>)
+
+class LessonHolder(view: LessonView) : RecyclerView.ViewHolder(view) {
+	fun update(lesson: Lesson) {
+		(itemView as LessonView).lesson = lesson
+	}
 }
