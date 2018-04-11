@@ -29,7 +29,7 @@ class LessonView @JvmOverloads constructor(
             } ?: ""
             teacherLabel.text = value?.teacher ?: ""
             dayLabel.text = PlanUtils.dayOfWeekToText(value?.section?.dayOfWeek ?: -1)
-            var weekType: Int? = value?.section?.weekType
+            val weekType: Int? = value?.section?.weekType
             when {
                 weekType != null -> if (weekType == 0) {
                     weekLabel.text = "чёт"

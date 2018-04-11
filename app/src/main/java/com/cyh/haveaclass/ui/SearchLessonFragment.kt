@@ -21,22 +21,22 @@ import kotlinx.coroutines.experimental.launch
 
 class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener, OnItemSelectedListener {
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        search_mode = SearchMode.BYNAME
+        searchMode = SearchMode.BYNAME
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         if (position == 1) {
-            search_mode = SearchMode.BYDAYOFWEEK
+            searchMode = SearchMode.BYDAYOFWEEK
         }
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        refreshLessonList(query, search_mode)
+        refreshLessonList(query, searchMode)
         return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        refreshLessonList(newText, search_mode)
+        refreshLessonList(newText, searchMode)
         return false
     }
 
@@ -100,12 +100,12 @@ class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener, OnItemS
             }
             launch(UI) {
                 val allLessons = webSitePlan.allLessons()
-                if (searchMode == SearchMode.BYNAME) {
-                    searchLessonList = allLessons.filter {
-                        it.name.toLowerCase().indexOf(query!!.toLowerCase()) != -1 || it.teacher.indexOf(query.toLowerCase()) != -1
+                searchLessonList = if (searchMode == SearchMode.BYNAME) {
+                    allLessons.filter {
+                        it.name.toLowerCase().indexOf(query!!.toLowerCase()) != -1 || it.teacher.toLowerCase().indexOf(query.toLowerCase()) != -1
                     }
                 } else {
-                    searchLessonList = allLessons.filter {
+                    allLessons.filter {
                         PlanUtils.dayOfWeekToText(it.section.dayOfWeek).toLowerCase().indexOf(query!!.toLowerCase()) != -1
                     }
                 }
@@ -116,7 +116,7 @@ class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener, OnItemS
     }
 
     private lateinit var webSitePlan: WebSitePlan
-    private var search_mode: SearchMode = SearchMode.BYNAME
+    private var searchMode: SearchMode = SearchMode.BYNAME
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
