@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.BaseAdapter
 import android.widget.SearchView
 import android.widget.Toast
@@ -15,17 +17,26 @@ import com.cyh.haveaclass.core.WebSitePlan
 import kotlinx.android.synthetic.main.search_lesson_fragment.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import java.util.*
 
 
-class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener {
+class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener, OnItemSelectedListener {
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        search_mode = SearchMode.BYNAME
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if (position == 1) {
+            search_mode = SearchMode.BYDAYOFWEEK
+        }
+    }
+
     override fun onQueryTextSubmit(query: String?): Boolean {
-        refreshLessonList(query)
+        refreshLessonList(query, search_mode)
         return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        refreshLessonList(newText)
+        refreshLessonList(newText, search_mode)
         return false
     }
 
@@ -58,20 +69,21 @@ class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener {
                 return lessonView
             }
 
-            override fun getItem(position: Int): Lesson = search_lessonList[position]
+            override fun getItem(position: Int): Lesson = searchLessonList[position]
 
             override fun getItemId(position: Int): Long = 0L
 
-            override fun getCount(): Int = search_lessonList.size
+            override fun getCount(): Int = searchLessonList.size
 
 
         }
         search2.setOnQueryTextListener(this)
+        search_spinner.onItemSelectedListener = this
     }
 
-    private var search_lessonList: List<Lesson> = emptyList()
+    private var searchLessonList: List<Lesson> = emptyList()
 
-    private fun refreshLessonList(query: String?) {
+    private fun refreshLessonList(query: String?, searchMode: SearchMode) {
         if (query.equals(null)) {
             return
         }
@@ -87,12 +99,15 @@ class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener {
                 return@launch
             }
             launch(UI) {
-                val calendar = Calendar.getInstance()
-                val nowSection = PlanUtils.nowSection2(calendar)
-
                 val allLessons = webSitePlan.allLessons()
-                search_lessonList = allLessons.filter {
-                    it.name.toLowerCase().indexOf(query!!.toLowerCase()) != -1 || it.teacher.indexOf(query.toLowerCase()) != -1
+                if (searchMode == SearchMode.BYNAME) {
+                    searchLessonList = allLessons.filter {
+                        it.name.toLowerCase().indexOf(query!!.toLowerCase()) != -1 || it.teacher.indexOf(query.toLowerCase()) != -1
+                    }
+                } else {
+                    searchLessonList = allLessons.filter {
+                        PlanUtils.dayOfWeekToText(it.section.dayOfWeek).indexOf(query!!) != -1
+                    }
                 }
                 (searched_lessonListView.adapter as BaseAdapter).notifyDataSetChanged()
                 search_swipeRefreshLayout.isRefreshing = false
@@ -101,9 +116,14 @@ class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private lateinit var webSitePlan: WebSitePlan
+    private var search_mode: SearchMode = SearchMode.BYNAME
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         webSitePlan = WebSitePlan(argGroupName)
     }
+}
+
+enum class SearchMode {
+    BYNAME, BYDAYOFWEEK
 }
