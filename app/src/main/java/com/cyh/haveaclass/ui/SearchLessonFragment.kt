@@ -106,7 +106,7 @@ class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener, OnItemS
                     }
                 } else {
                     searchLessonList = allLessons.filter {
-                        PlanUtils.dayOfWeekToText(it.section.dayOfWeek).indexOf(query!!) != -1
+                        PlanUtils.dayOfWeekToText(it.section.dayOfWeek).toLowerCase().indexOf(query!!.toLowerCase()) != -1
                     }
                 }
                 (searched_lessonListView.adapter as BaseAdapter).notifyDataSetChanged()
