@@ -7,20 +7,28 @@ import org.jsoup.nodes.Element
 class WebSitePlan(val groupName: String) : Plan {
 	
 	override fun allLessons(): Collection<Lesson> {
-		return lessonCache ?: fetchLessons()
+		return lessonCache ?: loadLessons()
 	}
+	
+	fun loadLessons(): List<Lesson> {
+		return webLessons(groupName).also { lessonCache = it }
+	}
+	
+	
+	private data class InstantLesson(
+		override val name: String,
+		override val type: String,
+		override val section: Section,
+		override val place: String,
+		override val teacher: String
+	) : Lesson
 	
 	private var lessonCache: List<Lesson>? = null
 	
-	fun fetchLessons(): List<InstantLesson> {
+	private fun webLessons(groupName: String): List<InstantLesson> {
 		val url = "http://rasp.tpu.ru/view.php?for=$groupName&aslist=1&weekType=1"
 		val doc = Jsoup.connect(url).get()
-		return parsePageHtml(doc).also { lessonCache = it }
-	}
-	
-	fun clearCache() {
-		lessonCache = null
-		System.gc()
+		return parsePageHtml(doc)
 	}
 	
 	private fun parsePageHtml(pageHtml: Document): List<InstantLesson> {
@@ -49,6 +57,5 @@ class WebSitePlan(val groupName: String) : Plan {
 			}
 		}
 	}
-	
 	
 }
