@@ -57,12 +57,3 @@ interface MutableLesson : Lesson {
 	override var place: String
 	override var teacher: String
 }
-
-data class InstantMutableLesson(
-	override val id: Int,
-	override var name: String,
-	override var type: String,
-	override var section: Section,
-	override var place: String,
-	override var teacher: String
-) : MutableLesson

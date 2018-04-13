@@ -40,11 +40,3 @@ interface Lesson {
 	 */
 	val teacher: String
 }
-
-data class InstantLesson(
-	override val name: String,
-	override val type: String,
-	override val section: Section,
-	override val place: String,
-	override val teacher: String
-) : Lesson
