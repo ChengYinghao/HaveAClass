@@ -1,5 +1,6 @@
 package com.cyh.haveaclass.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -77,7 +78,8 @@ class LessonListFragment : Fragment() {
 		//views
 		
 		class DayHolder(view: View) : ViewHolder(view) {
-			val dayLabel: TextView = view.dayLabel
+			val dayLayout = view.dayLayout
+			val dayTitle: TextView = view.dayTitle
 			val lessonList: RecyclerView = view.lessonList
 			var showingLessons: List<Lesson> = emptyList()
 			
@@ -95,11 +97,25 @@ class LessonListFragment : Fragment() {
 		}
 		
 		override fun onBindViewHolder(holder: DayHolder, position: Int) {
-			val day = dayPlans[position]
+			val dayPlan = dayPlans[position]
 			holder.run {
-				dayLabel.text = PlanUtils.dayOfWeekToText(day.dayOfWeek)
-				showingLessons = day.lessons
+				dayLayout.setBackgroundColor(dayOfWeekToColor(dayPlan.dayOfWeek))
+				dayTitle.text = PlanUtils.dayOfWeekToText(dayPlan.dayOfWeek)
+				showingLessons = dayPlan.lessons
 				lessonList.adapter.notifyDataSetChanged()
+			}
+		}
+		
+		private fun dayOfWeekToColor(dayOfWeek: Int): Int {
+			return when (dayOfWeek) {
+				1 -> Color.rgb(255, 127, 191)
+				2 -> Color.rgb(255, 191, 127)
+				3 -> Color.rgb(255, 255, 127)
+				4 -> Color.rgb(191, 255, 127)
+				5 -> Color.rgb(127, 255, 191)
+				6 -> Color.rgb(127, 191, 255)
+				7 -> Color.rgb(191, 127, 255)
+				else -> Color.argb(0, 0, 0, 0)
 			}
 		}
 		
@@ -109,9 +125,9 @@ class LessonListFragment : Fragment() {
 		
 		//data
 		
-		var showingLessons: List<Lesson> = emptyList()
+		var lessons: List<Lesson> = emptyList()
 		
-		override fun getItemCount(): Int = showingLessons.size
+		override fun getItemCount(): Int = lessons.size
 		
 		
 		//views
@@ -130,7 +146,7 @@ class LessonListFragment : Fragment() {
 		}
 		
 		override fun onBindViewHolder(holder: LessonHolder, position: Int) {
-			val lesson = showingLessons[position]
+			val lesson = lessons[position]
 			holder.run {
 				timeLabel.text = PlanUtils.sectionOfDayToText(lesson.section.sectionOfDay)
 				placeLabel.text = lesson.place
