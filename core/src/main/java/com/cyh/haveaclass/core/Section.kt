@@ -1,5 +1,68 @@
 package com.cyh.haveaclass.core
 
+data class Week(
+	val weekType: Int
+)
+
+fun Week.next(): Week {
+	return Week((weekType + 1) % 2)
+}
+
+fun Week.last(): Week {
+	return next()
+}
+
+operator fun Week.unaryPlus(): Week = next()
+
+operator fun Week.unaryMinus(): Week = last()
+
+
+data class Day(
+	val weekType: Int,
+	val dayOfWeek: Int
+)
+
+fun Day.next(): Day {
+	var nextDayOfWeek = dayOfWeek
+	var nextWeekType = weekType
+	
+	kotlin.run {
+		nextDayOfWeek++
+		if (nextDayOfWeek <= 6) return@run
+		nextDayOfWeek = 0
+		
+		nextWeekType++
+		if (nextWeekType <= 1) return@run
+		nextWeekType = 0
+	}
+	
+	return Day(nextWeekType, nextDayOfWeek)
+}
+
+fun Day.last(): Day {
+	var lastDayOfWeek = dayOfWeek
+	var lastWeekType = weekType
+	
+	kotlin.run {
+		lastDayOfWeek--
+		if (lastDayOfWeek >= 0) return@run
+		lastDayOfWeek = 6
+		
+		lastWeekType--
+		if (lastWeekType >= 0) return@run
+		lastWeekType = 1
+	}
+	
+	return Day(lastWeekType, lastDayOfWeek)
+}
+
+operator fun Day.unaryPlus(): Day = next()
+
+operator fun Day.unaryMinus(): Day = last()
+
+fun Day.week(): Week = Week(weekType)
+
+
 data class Section(
 	/**
 	 * 单周还是双周（周日视为一周的开始）。
@@ -21,7 +84,7 @@ data class Section(
 	val sectionOfDay: Int
 )
 
-operator fun Section.unaryPlus(): Section {
+fun Section.next(): Section {
 	var nextSection = sectionOfDay
 	var nextDayOfWeek = dayOfWeek
 	var nextWeekType = weekType
@@ -43,7 +106,7 @@ operator fun Section.unaryPlus(): Section {
 	return Section(nextWeekType, nextDayOfWeek, nextSection)
 }
 
-operator fun Section.unaryMinus(): Section {
+fun Section.last(): Section {
 	var lastSection = sectionOfDay
 	var lastDayOfWeek = dayOfWeek
 	var lastWeekType = weekType
@@ -64,3 +127,11 @@ operator fun Section.unaryMinus(): Section {
 	
 	return Section(lastWeekType, lastDayOfWeek, lastSection)
 }
+
+operator fun Section.unaryPlus(): Section = next()
+
+operator fun Section.unaryMinus(): Section = last()
+
+fun Section.day(): Day = Day(weekType, dayOfWeek)
+
+fun Section.week(): Week = Week(weekType)

@@ -80,26 +80,26 @@ object PlanUtils {
 	
 	fun dayOfWeekToText(dayOfWeek: Int): String {
 		return when (dayOfWeek) {
+			0 -> "Воскресение"
 			1 -> "Понедельник"
 			2 -> "Вторник"
 			3 -> "Среда"
 			4 -> "Четверг"
 			5 -> "Пятница"
 			6 -> "Суббота"
-			7 -> "Воскресение"
 			else -> ""
 		}
 	}
 	
 	fun textToDayOfWeek(text: String): Int {
 		return when (text) {
+			"Воскресение" -> 0
 			"Понедельник" -> 1
 			"Вторник" -> 2
 			"Среда" -> 3
 			"Четверг" -> 4
 			"Пятница" -> 5
 			"Суббота" -> 6
-			"Воскресение" -> 7
 			else -> -1
 		}
 	}
