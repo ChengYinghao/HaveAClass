@@ -42,7 +42,7 @@ class PlanUtilsUnitTest {
 		val sections = time.map { (hour, minute) ->
 			calendar.set(Calendar.HOUR_OF_DAY, hour)
 			calendar.set(Calendar.MINUTE, minute)
-			PlanUtils.nowSection(calendar)
+			PlanUtils.nowSectionOfDay(calendar)
 		}.toIntArray()
 		val rightAnswer = intArrayOf(0, 1, 1, 2, 7, 8)
 		

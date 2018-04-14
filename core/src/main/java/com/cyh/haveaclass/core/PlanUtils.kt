@@ -4,17 +4,17 @@ import java.util.*
 
 object PlanUtils {
 	
-	fun nowDayOfWeek(calendar: Calendar = Calendar.getInstance()): Int {
-		return calendar.get(Calendar.DAY_OF_WEEK) - 1
-	}
-	
 	fun nowWeekType(calendar: Calendar = Calendar.getInstance()): Int {
 		val day = calendar.timeInMillis / 1000 / 3600 / 24 - 3
 		val weekUTC = day / 7L + 1
 		return (weekUTC % 2).toInt()
 	}
 	
-	fun nowSection(calendar: Calendar = Calendar.getInstance()): Int {
+	fun nowDayOfWeek(calendar: Calendar = Calendar.getInstance()): Int {
+		return calendar.get(Calendar.DAY_OF_WEEK) - 1
+	}
+	
+	fun nowSectionOfDay(calendar: Calendar = Calendar.getInstance()): Int {
 		fun minuteOfDay(hour: Int, minute: Int) = hour * 60 + minute
 		
 		val nowMinuteOfDay = minuteOfDay(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE))
@@ -26,7 +26,7 @@ object PlanUtils {
 		return (nowMinuteOfDay - dayStart) / 115 + 1
 	}
 	
-	fun nowSection2(calendar: Calendar = Calendar.getInstance()): Section {
+	fun nowSection(calendar: Calendar = Calendar.getInstance()): Section {
 		val weekType = calendar.run {
 			val day = timeInMillis / 1000 / 3600 / 24 - 3
 			val weekUTC = day / 7L + 1
@@ -50,6 +50,7 @@ object PlanUtils {
 		}
 		return Section(weekType, dayOfWeek, sectionOfDay)
 	}
+	
 	
 	fun sectionOfDayToText(sectionOfDay: Int): String {
 		return when (sectionOfDay) {
