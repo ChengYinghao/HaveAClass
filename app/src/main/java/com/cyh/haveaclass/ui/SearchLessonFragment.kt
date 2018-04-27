@@ -62,6 +62,13 @@ class SearchLessonFragment : Fragment(), SearchView.OnQueryTextListener, OnItemS
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setButton2.setOnClickListener {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, SettingFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
+        }
+
         searched_lessonListView.adapter = object : BaseAdapter() {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
                 val lessonView = (convertView as? LessonView) ?: LessonView(context)

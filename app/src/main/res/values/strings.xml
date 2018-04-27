@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HaveAClass</string>
+    <string name="app_name">СверхРасписание</string>
     <string name="section_hint">请输入该课属于第几节课（1表示第一节课，2表示第二节课，以此类推）</string>
     <string name="place_hint">请输入该课对应地点</string>
     <string name="day_hint">请输入该课对应周几（1表示周一，2表示周二，以此类推）</string>
@@ -16,9 +16,10 @@
     <string name="nextLessonButton">NextLesson</string>
     <string name="completeInput">Complete</string>
     <string name="team_number_text">请输入组号</string>
-    <string name="team_number_input">Группа</string>
+    <string name="team_number_input">Группа(ТПУ)</string>
     <string name="set_determine_button_text">OK</string>
 	<string name="search">搜索</string>
+    <string name="setButton_text">设置</string>
     <string-array name="search_spinner_array">
         <item>按老师或课程名称搜索</item>
         <item>按周几搜索（例如среда）</item>
